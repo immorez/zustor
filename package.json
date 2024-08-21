@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "build": "tsup"
+    "build": "tsup",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,md}'"
   },
   "dependencies": {
     "react": "^18.3.1",
