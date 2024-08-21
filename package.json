@@ -10,5 +10,16 @@
     "@types/react": "^18.3.4",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4"
-  }
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "zustand": "^4.0.0"
+  },
+  "keywords": [
+    "zustand",
+    "query",
+    "react",
+    "hooks"
+  ],
+  "license": "MIT"
 }
