@@ -1,21 +1,18 @@
-# Created by https://www.toptal.com/developers/gitignore/api/react
-# Edit at https://www.toptal.com/developers/gitignore?templates=react
+.DS_STORE
 
-### react ###
-.DS_*
-*.log
-logs
-**/*.backup.*
-**/*.back.*
-
+/dist/
 node_modules
-bower_components
-.vscode
+.rpt2_cache
+.cache
+.env*
 
-*.sublime*
+/coverage
 
-psd
-thumb
-sketch
+# Ignore npm/yarn debug log
+npm-debug.log
+yarn-error.log
 
-# End of https://www.toptal.com/developers/gitignore/api/react
+# storybook
+.out
+
+/coverage
