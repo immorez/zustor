@@ -8,7 +8,7 @@ export function createQueryHook(
   config: Partial<QueryConfig<any>> = {},
   store: StoreApi<any>,
 ) {
-  const hashedKey = hashKey(key)
+  const hashedKey = hashKey(key);
   return function useQuery() {
     const { setState, getState } = store;
     const { onSuccess, onError, cacheTime = 60000 } = config; // Default cache time is 1 minute

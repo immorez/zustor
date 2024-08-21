@@ -18,5 +18,5 @@ interface HookConfig {
   mutations?: Record<string, MutationConfig<unknown, unknown>>;
 }
 
-type QueryKey = ReadonlyArray<unknown>
-type MutationKey = ReadonlyArray<unknown>
+type QueryKey = ReadonlyArray<unknown>;
+type MutationKey = ReadonlyArray<unknown>;

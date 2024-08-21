@@ -4,45 +4,45 @@ export function hashKey(queryKey: QueryKey | MutationKey): string {
       ? Object.keys(val)
           .sort()
           .reduce((result, key) => {
-            result[key] = val[key]
-            return result
+            result[key] = val[key];
+            return result;
           }, {} as any)
       : val,
-  )
+  );
 }
 
 // Copied from: https://github.com/jonschlinkert/is-plain-object
 export function isPlainObject(o: any): o is Object {
   if (!hasObjectPrototype(o)) {
-    return false
+    return false;
   }
 
   // If has no constructor
-  const ctor = o.constructor
+  const ctor = o.constructor;
   if (ctor === undefined) {
-    return true
+    return true;
   }
 
   // If has modified prototype
-  const prot = ctor.prototype
+  const prot = ctor.prototype;
   if (!hasObjectPrototype(prot)) {
-    return false
+    return false;
   }
 
   // If constructor does not have an Object-specific method
   if (!prot.hasOwnProperty('isPrototypeOf')) {
-    return false
+    return false;
   }
 
   // Handles Objects created by Object.create(<arbitrary prototype>)
   if (Object.getPrototypeOf(o) !== Object.prototype) {
-    return false
+    return false;
   }
 
   // Most likely a plain Object
-  return true
+  return true;
 }
 
 function hasObjectPrototype(o: any): boolean {
-  return Object.prototype.toString.call(o) === '[object Object]'
+  return Object.prototype.toString.call(o) === '[object Object]';
 }

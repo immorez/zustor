@@ -6,7 +6,7 @@ export function createMutationHook(
   mutationFn: (data: any) => Promise<any>,
   store: StoreApi<any>,
 ) {
-  const hashedKey = hashKey(key)
+  const hashedKey = hashKey(key);
   return function useMutation() {
     const { setState } = store;
 

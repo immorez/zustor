@@ -2,10 +2,7 @@ import { StoreApi } from 'zustand';
 import { createQueryHook } from './createQueryHook';
 import { createMutationHook } from './createMutationHook';
 
-export function createApi(
-  hookConfig: HookConfig,
-  store: StoreApi<any>,
-) {
+export function createApi(hookConfig: HookConfig, store: StoreApi<any>) {
   const hooks: Record<string, any> = {};
 
   // Generate Query Hooks
@@ -20,7 +17,9 @@ export function createApi(
 
   // Generate Mutation Hooks
   if (hookConfig.mutations) {
-    for (const [endpoint, { mutationFn }] of Object.entries(hookConfig.mutations)) {
+    for (const [endpoint, { mutationFn }] of Object.entries(
+      hookConfig.mutations,
+    )) {
       const hookName = `use${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)}Mutation`;
       hooks[hookName] = createMutationHook([endpoint], mutationFn, store);
     }
