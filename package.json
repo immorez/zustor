@@ -1,65 +1,14 @@
 {
-  "name": "boilerplate-lib-vite-react",
-  "version": "0.0.0",
-  "description": "Boilerplate to create library with Vite, Typescript and React.js",
-  "license": "MIT",
-  "main": "./dist/my-lib-hello-2.umd.js",
-  "module": "./dist/my-lib-hello-2.es.js",
-  "types": "./dist/lib/main.d.ts",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "lint": "eslint src --ext ts,tsx",
-    "lint:fix": "yarn lint --fix",
-    "type-check": "tsc --project tsconfig.json --pretty --noEmit",
-    "ci": "yarn lint && yarn type-check",
-    "prepare": "husky install"
+    "build": "tsup"
   },
-  "files": [
-    "dist"
-  ],
-  "exports": {
-    ".": {
-      "import": "./dist/my-lib-hello-2.es.js",
-      "require": "./dist/my-lib-hello-2.umd.js"
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/panhavsilva/boilerplate-lib-vite-react.git"
-  },
-  "keywords": [],
-  "author": "Pâmela Vieira da Silva - @panhavsilva",
-  "bugs": {
-    "url": "https://github.com/panhavsilva/boilerplate-lib-vite-react/issues"
-  },
-  "homepage": "https://github.com/panhavsilva/boilerplate-lib-vite-react#readme",
-  "peerDependencies": {
-    "react": ">=17.x"
+  "dependencies": {
+    "react": "^18.3.1",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
-    "@types/node": "17.0.21",
-    "@types/react": "17.0.40",
-    "@types/react-dom": "17.0.13",
-    "@vitejs/plugin-react": "1.2.0",
-    "babel-eslint": "10.1.0",
-    "eslint": "8.11.0",
-    "eslint-config-react-app": "7.0.0",
-    "eslint-config-standard": "16.0.3",
-    "eslint-config-standard-jsx": "10.0.0",
-    "eslint-config-standard-react": "11.0.1",
-    "eslint-plugin-import": "2.25.4",
-    "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-promise": "6.0.0",
-    "eslint-plugin-react": "7.29.4",
-    "husky": "7.0.4",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "typescript": "4.6.2",
-    "vite": "2.9.17",
-    "vite-plugin-dts": "0.9.10",
-    "vite-plugin-linter": "0.2.4",
-    "vite-tsconfig-paths": "3.4.1"
+    "@types/react": "^18.3.4",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4"
   }
 }
