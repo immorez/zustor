@@ -1,8 +1,12 @@
-import { StoreApi } from 'zustand';
+import { create } from 'zustand';
 import { createQueryHook } from './createQueryHook';
 import { createMutationHook } from './createMutationHook';
+import { GenerateHookTypes, HookConfig, ZuskitStore } from '../types';
 
-export function createApi(hookConfig: HookConfig, store: StoreApi<any>) {
+export function createApi<Config extends HookConfig>(
+  hookConfig: Config,
+  store: ZuskitStore,
+): GenerateHookTypes<Config> {
   const hooks: Record<string, any> = {};
 
   // Generate Query Hooks
@@ -10,7 +14,8 @@ export function createApi(hookConfig: HookConfig, store: StoreApi<any>) {
     for (const [endpoint, { queryFn, config }] of Object.entries(
       hookConfig.queries,
     )) {
-      const hookName = `use${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)}Query`;
+      const hookName =
+        `use${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)}Query` as const;
       hooks[hookName] = createQueryHook([endpoint], queryFn, config, store);
     }
   }
@@ -20,10 +25,11 @@ export function createApi(hookConfig: HookConfig, store: StoreApi<any>) {
     for (const [endpoint, { mutationFn }] of Object.entries(
       hookConfig.mutations,
     )) {
-      const hookName = `use${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)}Mutation`;
+      const hookName =
+        `use${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)}Mutation` as const;
       hooks[hookName] = createMutationHook([endpoint], mutationFn, store);
     }
   }
 
-  return hooks;
+  return hooks as GenerateHookTypes<Config>;
 }

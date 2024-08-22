@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { StoreApi } from 'zustand';
 import { hashKey } from '../utils';
+import { QueryConfig, ZuskitStore } from '../types';
 
 export function createQueryHook(
   key: ReadonlyArray<unknown>,
   queryFn: () => Promise<any>,
   config: Partial<QueryConfig<any>> = {},
-  store: StoreApi<any>,
+  store: ZuskitStore,
 ) {
   const hashedKey = hashKey(key);
   return function useQuery() {

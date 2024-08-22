@@ -1,10 +1,10 @@
-import { StoreApi } from 'zustand';
 import { hashKey } from '../utils';
+import { ZuskitStore } from '../types';
 
 export function createMutationHook(
   key: ReadonlyArray<unknown>,
   mutationFn: (data: any) => Promise<any>,
-  store: StoreApi<any>,
+  store: ZuskitStore,
 ) {
   const hashedKey = hashKey(key);
   return function useMutation() {
