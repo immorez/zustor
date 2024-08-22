@@ -1,4 +1,3 @@
-import { create } from 'zustand';
 import { createQueryHook } from './createQueryHook';
 import { createMutationHook } from './createMutationHook';
 import { GenerateHookTypes, HookConfig, ZuskitStore } from '../types';

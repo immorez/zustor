@@ -39,7 +39,8 @@ export type GenerateHookTypes<Config extends HookConfig> = {
   [K in keyof Config['queries'] as `use${Capitalize<string & K>}Query`]: QueryHook<
     ReturnType<Config['queries'][K]['queryFn']>
   >;
-} & { // Map over mutation endpoints to create `useXMutation` hooks
+} & {
+  // Map over mutation endpoints to create `useXMutation` hooks
   [K in keyof Config['mutations'] as `use${Capitalize<string & K>}Mutation`]: MutationHook<
     ReturnType<Config['mutations'][K]['mutationFn']>
   >;
