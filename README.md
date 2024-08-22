@@ -28,8 +28,6 @@ or
 
 First, define your queries and mutations in a configuration object:
 
-typescript
-
 ```typescript
 import create from 'zustand';
 import { createApi } from 'zuskit';
