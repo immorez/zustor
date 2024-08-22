@@ -16,13 +16,11 @@ Install Zuskit along with Zustand:
 
 bash
 
-Copy code
+`npm install zustand zuskit`
 
-`npm install zustand zuskit
+or
 
-# or
-
-yarn add zustand zuskit`
+`yarn add zustand zuskit`
 
 ## Basic Usage
 
@@ -32,82 +30,90 @@ First, define your queries and mutations in a configuration object:
 
 typescript
 
-Copy code
-
-`import create from 'zustand';
+```typescript
+import create from 'zustand';
 import { createApi } from 'zuskit';
 
 const apiConfig = {
-queries: {
-getUser: {
-queryFn: () => fetch('/api/user').then((res) => res.json()),
-},
-getPosts: {
-queryFn: () => fetch('/api/posts').then((res) => res.json()),
-},
-},
-mutations: {
-updateUser: {
-mutationFn: (data) =>
-fetch('/api/user', {
-method: 'PUT',
-body: JSON.stringify(data),
-}).then((res) => res.json()),
-},
-},
+  queries: {
+    getUser: {
+      queryFn: () => fetch('/api/user').then((res) => res.json()),
+    },
+    getPosts: {
+      queryFn: () => fetch('/api/posts').then((res) => res.json()),
+    },
+  },
+  mutations: {
+    updateUser: {
+      mutationFn: (data) =>
+        fetch('/api/user', {
+          method: 'PUT',
+          body: JSON.stringify(data),
+        }).then((res) => res.json()),
+    },
+  },
 };
 
 // Create a Zustand store instance
 const useStore = create(() => ({}));
 
 // Generate hooks based on your API configuration
-const { useGetUserQuery, useGetPostsQuery, useUpdateUserMutation } = createApi(apiConfig, useStore);`
+const { useGetUserQuery, useGetPostsQuery, useUpdateUserMutation } = createApi(
+  apiConfig,
+  useStore,
+);
+```
 
 ### 2\. Using Generated Hooks in Components
 
 Now, use the generated hooks in your React components:
 
-typescript
-
-Copy code
-
-`import React from 'react';
+```typescript
+import React from 'react';
+import { useGetUserQuery } from './store/api'; // Adjust import path as needed
 
 function UserProfile() {
-const { data: user, refetch } = useGetUserQuery();
+  const { data: user, refetch } = useGetUserQuery();
 
-return (
-<div>
-<h1>{user.name}</h1>
-<button onClick={refetch}>Refresh</button>
-</div>
-);
-}`
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <button onClick={refetch}>Refresh</button>
+    </div>
+  );
+}
+
+export default UserProfile;
+```
 
 ### 3\. Performing Mutations
 
 Use the mutation hooks to update data:
 
-typescript
+```typescript
+import React from 'react';
+import { useUpdateUserMutation } from './store/api'; // Adjust import path as needed
 
-Copy code
+function UpdateUserForm() {
+  const { mutate: updateUser } = useUpdateUserMutation();
 
-`function UpdateUserForm() {
-const { mutate: updateUser } = useUpdateUserMutation();
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = { name: event.currentTarget.name.value };
+    updateUser(data);
+  };
 
-const handleSubmit = (event) => {
-event.preventDefault();
-const data = { name: event.target.name.value };
-updateUser(data);
-};
+  return (
+    <form onSubmit={handleSubmit}>
+      <input name="name" placeholder="Enter new name" />
+      <button type="submit">Update</button>
+    </form>
+  );
+}
 
-return (
-<form onSubmit={handleSubmit}>
-<input name="name" placeholder="Enter new name" />
-<button type="submit">Update</button>
-</form>
-);
-}`
+export default UpdateUserForm;
+
+```
 
 ## Advanced Features
 
