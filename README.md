@@ -145,6 +145,34 @@ This function returns an object containing the dynamically generated hooks based
 
 - **`mutate`**: Function to trigger the mutation.
 
+## Contributing
+
+We welcome contributions to `zuskit`! If you would like to contribute, please follow these steps:
+
+1.  **Fork the Repository:** Create a personal fork of the repository by clicking the "Fork" button at the top right of this page.
+
+2.  **Clone Your Fork:** Clone your fork to your local machine.
+
+    `git clone https://github.com/your-username/zuskit.git`
+
+3.  **Create a Branch:** Create a new branch for your changes.
+
+    `git checkout -b my-feature-branch`
+
+4.  **Make Your Changes:** Implement your feature or fix your bug. Be sure to write tests for your changes if applicable.
+
+5.  **Commit Your Changes:** Commit your changes with a descriptive message.
+
+    `git commit -m "Add feature X or fix issue Y"`
+
+6.  **Push Your Changes:** Push your changes to your fork.
+
+    `git push origin my-feature-branch`
+
+7.  **Create a Pull Request:** Go to the original repository and create a pull request from your branch. Provide a clear description of your changes and why they are necessary.
+
+8.  **Review and Feedback:** Your pull request will be reviewed by the maintainers. Be open to feedback and ready to make any necessary revisions.
+
 ## License
 
 This project is licensed under the MIT License.
