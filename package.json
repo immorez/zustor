@@ -7,9 +7,9 @@
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,md}'"
   },
-  "main": "./dist/zuskit.umd.js",
-  "module": "./dist/zuskit.es.js",
-  "types": "./dist/src/types.d.ts",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/src/index.d.ts",
   "files": [
     "dist"
   ],
