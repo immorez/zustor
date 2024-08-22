@@ -4,9 +4,22 @@
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,md}'"
   },
+  "main": "./dist/zuskit.umd.js",
+  "module": "./dist/zuskit.es.js",
+  "types": "./dist/src/types.d.ts",
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/immorez/zuskit"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/zuskit.es.js",
+      "require": "./dist/zuskit.umd.js"
+    }
+  },
   "dependencies": {
     "react": "^18.3.1",
     "zustand": "^4.5.5"
