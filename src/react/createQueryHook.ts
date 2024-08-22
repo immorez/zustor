@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { StoreApi } from 'zustand';
+import { useEffect, useRef } from 'react';
 import { hashKey } from '../utils';
 import { QueryConfig, ZuskitStore } from '../types';
 
@@ -12,7 +11,12 @@ export function createQueryHook(
   const hashedKey = hashKey(key);
   return function useQuery() {
     const { setState, getState } = store;
-    const { onSuccess, onError, cacheTime = 60000 } = config; // Default cache time is 1 minute
+
+    // Default cache time is 1 minute
+    const { onSuccess, onError, cacheTime = 60000 } = config; 
+    
+    // Track if data has been fetched
+    const hasFetched = useRef(false); 
 
     // Helper function to fetch data and update the cache
     const fetchData = async () => {
@@ -44,8 +48,10 @@ export function createQueryHook(
       const data = getCachedData();
       if (!data) {
         await fetchData();
-      } else {
-        // Fetch new data in the background
+        // Mark as fetched
+        hasFetched.current = true; 
+      } else if (!hasFetched.current) {
+        // Fetch new data in the background if needed
         fetchData();
       }
     };
