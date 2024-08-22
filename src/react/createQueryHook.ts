@@ -1,12 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { hashKey } from '../utils';
-import { QueryConfig, ZuskitStore } from '../types';
+import { QueryConfig, ZustorStore } from '../types';
 
 export function createQueryHook(
   key: ReadonlyArray<unknown>,
   queryFn: () => Promise<any>,
   config: Partial<QueryConfig<any>> = {},
-  store: ZuskitStore,
+  store: ZustorStore,
 ) {
   const hashedKey = hashKey(key);
   return function useQuery() {

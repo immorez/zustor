@@ -32,7 +32,7 @@ export interface HookConfig {
 export type QueryKey = ReadonlyArray<unknown>;
 export type MutationKey = ReadonlyArray<unknown>;
 
-export type ZuskitStore = ReturnType<typeof create>;
+export type ZustorStore = ReturnType<typeof create>;
 
 export type GenerateHookTypes<Config extends HookConfig> = {
   // Map over query endpoints to create `useXQuery` hooks

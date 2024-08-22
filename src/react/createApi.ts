@@ -1,10 +1,10 @@
 import { createQueryHook } from './createQueryHook';
 import { createMutationHook } from './createMutationHook';
-import { GenerateHookTypes, HookConfig, ZuskitStore } from '../types';
+import { GenerateHookTypes, HookConfig, ZustorStore } from '../types';
 
 export function createApi<Config extends HookConfig>(
   hookConfig: Config,
-  store: ZuskitStore,
+  store: ZustorStore,
 ): GenerateHookTypes<Config> {
   const hooks: Record<string, any> = {};
 

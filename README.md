@@ -1,10 +1,10 @@
-# Zuskit
+# zustor
 
-**Zuskit** is a lightweight and flexible data-fetching library that combines the power of Zustand for state management with efficient query capabilities. It allows you to effortlessly manage server-state, caching, and mutations by dynamically generating hooks from your API configuration.
+**zustor** is a lightweight and flexible data-fetching library that combines the power of Zustand for state management with efficient query capabilities. It allows you to effortlessly manage server-state, caching, and mutations by dynamically generating hooks from your API configuration.
 
 # Disclaimer
 
-Important Notice: zuskit is provided as-is. While every effort has been made to ensure its quality and reliability, it may not cover all edge cases or meet every production requirement. Users are responsible for evaluating its suitability for their specific use case and testing thoroughly before deploying it to production environments. The maintainers are not liable for any issues, including but not limited to data loss or system failures, that arise from using this package.
+Important Notice: zustor is provided as-is. While every effort has been made to ensure its quality and reliability, it may not cover all edge cases or meet every production requirement. Users are responsible for evaluating its suitability for their specific use case and testing thoroughly before deploying it to production environments. The maintainers are not liable for any issues, including but not limited to data loss or system failures, that arise from using this package.
 
 ## Features
 
@@ -16,15 +16,15 @@ Important Notice: zuskit is provided as-is. While every effort has been made to 
 
 ## Installation
 
-Install Zuskit along with Zustand:
+Install zustor along with Zustand:
 
 bash
 
-`npm install zustand zuskit`
+`npm install zustand zustor`
 
 or
 
-`yarn add zustand zuskit`
+`yarn add zustand zustor`
 
 ## Basic Usage
 
@@ -34,7 +34,7 @@ First, define your queries and mutations in a configuration object:
 
 ```typescript
 import create from 'zustand';
-import { createApi } from 'zuskit';
+import { createApi } from 'zustor';
 
 const apiConfig = {
   queries: {
@@ -121,15 +121,15 @@ export default UpdateUserForm;
 
 ### Cache Invalidation & Polling
 
-Zuskit provides built-in support for cache invalidation and polling intervals, allowing you to keep your data fresh.
+zustor provides built-in support for cache invalidation and polling intervals, allowing you to keep your data fresh.
 
 ### Customizing the Cache Key
 
-Zuskit allows you to customize the cache key by passing an array as the key and serializing it. Strings are placed first and sorted, followed by objects with structural sharing, similar to React Query.
+zustor allows you to customize the cache key by passing an array as the key and serializing it. Strings are placed first and sorted, followed by objects with structural sharing, similar to React Query.
 
 ## API
 
-### `createApi(hookConfig: HookConfig, store: ZuskitStore)`
+### `createApi(hookConfig: HookConfig, store: ZustorStore)`
 
 - **`hookConfig`**: Configuration object containing queries and mutations.
 - **`store`**: Zustand store instance to manage the state.
@@ -147,13 +147,13 @@ This function returns an object containing the dynamically generated hooks based
 
 ## Contributing
 
-We welcome contributions to `zuskit`! If you would like to contribute, please follow these steps:
+We welcome contributions to `zustor`! If you would like to contribute, please follow these steps:
 
 1.  **Fork the Repository:** Create a personal fork of the repository by clicking the "Fork" button at the top right of this page.
 
 2.  **Clone Your Fork:** Clone your fork to your local machine.
 
-    `git clone https://github.com/your-username/zuskit.git`
+    `git clone https://github.com/your-username/zustor.git`
 
 3.  **Create a Branch:** Create a new branch for your changes.
 
