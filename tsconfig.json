@@ -11,10 +11,10 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-  },
-  "paths": {
-    "@immorez/zuskit": ["./src/react/index.ts"]
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "zuskit": ["./src/index.ts"]
+    }
   },
   "include": ["src"]
 }

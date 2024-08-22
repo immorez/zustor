@@ -1,4 +1,7 @@
 {
+  "name": "zuskit",
+  "version": "1.0.0",
+  "description": "A lightweight data-fetching library that combines Zustand with powerful query and mutation hooks.",
   "scripts": {
     "build": "tsup",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
@@ -25,6 +28,7 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
+    "@swc/core": "^1.7.14",
     "@types/react": "^18.3.4",
     "@typescript-eslint/eslint-plugin": "^8.2.0",
     "@typescript-eslint/parser": "^8.2.0",
