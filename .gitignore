@@ -12,6 +12,7 @@ node_modules
 # Ignore npm/yarn debug log
 npm-debug.log
 yarn-error.log
+.vscode
 
 # storybook
 .out
