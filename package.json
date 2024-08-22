@@ -19,8 +19,8 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/zuskit.es.js",
-      "require": "./dist/zuskit.umd.js"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     }
   },
   "dependencies": {
