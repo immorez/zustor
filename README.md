@@ -2,6 +2,10 @@
 
 **Zuskit** is a lightweight and flexible data-fetching library that combines the power of Zustand for state management with efficient query capabilities. It allows you to effortlessly manage server-state, caching, and mutations by dynamically generating hooks from your API configuration.
 
+# Disclaimer
+
+Important Notice: zuskit is provided as-is. While every effort has been made to ensure its quality and reliability, it may not cover all edge cases or meet every production requirement. Users are responsible for evaluating its suitability for their specific use case and testing thoroughly before deploying it to production environments. The maintainers are not liable for any issues, including but not limited to data loss or system failures, that arise from using this package.
+
 ## Features
 
 - **Dynamic Hook Generation**: Create query and mutation hooks based on your API configuration with ease.
