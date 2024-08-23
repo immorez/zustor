@@ -153,7 +153,7 @@ We welcome contributions to `zustor`! If you would like to contribute, please fo
 
 2.  **Clone Your Fork:** Clone your fork to your local machine.
 
-    `git clone https://github.com/your-username/zustor.git`
+    `git clone https://github.com/immorez/zustor.git`
 
 3.  **Create a Branch:** Create a new branch for your changes.
 
