@@ -176,12 +176,19 @@ We welcome contributions to `zustor`! If you would like to contribute, please fo
 ## TODO
 
 [] - 🛠️ Add support for SSR (Server-Side Rendering)
+
 [] - 🚀 Implement caching strategies and optimizations
+
 [] - ⏲️ Improve query and mutation polling mechanisms
+
 [] - 📄 Enhance documentation and examples
+
 [] - 🔧 Add more robust error handling
+
 [] - 🧪 Write comprehensive test coverage
+
 [] - 🔌 Implement WebSocket (Real-time) updates
+
 [] - Documentation web page
 
 ## License
