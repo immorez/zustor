@@ -1,3 +1,3 @@
 export * from './react';
 
-export { ZustorConfig } from './types';
+export { ZustorConfig } from './types.d';

@@ -39,7 +39,8 @@ export function createQueryHook(
       const now = Date.now();
       if (cached && now - cached.timestamp < cacheTime) {
         return cached.data;
-      }
+      } 
+      hasFetched.current = false;
       return null;
     };
 
