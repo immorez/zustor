@@ -1,6 +1,6 @@
 {
   "name": "zustor",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "description": "A lightweight data-fetching library that combines Zustand with powerful query and mutation hooks.",
   "scripts": {
     "build": "tsup",
