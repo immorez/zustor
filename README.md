@@ -129,7 +129,7 @@ zustor allows you to customize the cache key by passing an array as the key and 
 
 ## API
 
-### `createApi(hookConfig: HookConfig, store: ZustorStore)`
+### `createApi(hookConfig: ZustorConfig, store: ZustorStore)`
 
 - **`hookConfig`**: Configuration object containing queries and mutations.
 - **`store`**: Zustand store instance to manage the state.

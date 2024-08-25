@@ -24,7 +24,7 @@ export interface MutationConfig<MutationInput, MutationResult> {
   mutationFn: (data: MutationInput) => Promise<MutationResult>;
 }
 
-export interface HookConfig {
+export interface ZustorConfig {
   queries?: Record<string, EndpointConfig<unknown>>;
   mutations?: Record<string, MutationConfig<unknown, unknown>>;
 }
@@ -34,7 +34,7 @@ export type MutationKey = ReadonlyArray<unknown>;
 
 export type ZustorStore = ReturnType<typeof create>;
 
-export type GenerateHookTypes<Config extends HookConfig> = {
+export type GenerateHookTypes<Config extends ZustorConfig> = {
   // Map over query endpoints to create `useXQuery` hooks
   [K in keyof Config['queries'] as `use${Capitalize<string & K>}Query`]: QueryHook<
     ReturnType<Config['queries'][K]['queryFn']>

@@ -1,8 +1,8 @@
 import { createQueryHook } from './createQueryHook';
 import { createMutationHook } from './createMutationHook';
-import { GenerateHookTypes, HookConfig, ZustorStore } from '../types';
+import { GenerateHookTypes, ZustorConfig, ZustorStore } from '../types';
 
-export function createApi<Config extends HookConfig>(
+export function createApi<Config extends ZustorConfig>(
   hookConfig: Config,
   store: ZustorStore,
 ): GenerateHookTypes<Config> {
