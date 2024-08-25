@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react';
-import { hashKey } from '../utils';
+import { hashKey, log } from '../utils';
 import { QueryConfig, ZustorStore } from '../types';
+import { useOnMountUnsafe } from './hooks/useOnMountUnsafe';
+import { useState } from 'react';
 
 export function createQueryHook(
   key: ReadonlyArray<unknown>,
@@ -9,26 +10,64 @@ export function createQueryHook(
   store: ZustorStore,
 ) {
   const hashedKey = hashKey(key);
+  const { setState, getState } = store;
+
   return function useQuery() {
-    const { setState, getState } = store;
+    // State to track initialization (for the initial render)
+    const [hasInitialized, setHasInitialized] = useState(false);
+
+    // State to track loading (for the initial load)
+    const [isLoading, setIsLoading] = useState(false);
+    // State to track background fetching (subsequent refetches)
+    const [isFetching, setIsFetching] = useState(false);
+
+    // State to track if an error occurred
+    const [error, setError] = useState<Error | null>(null);
 
     // Default cache time is 1 minute
     const { onSuccess, onError, cacheTime = 60000 } = config;
 
-    // Track if data has been fetched
-    const hasFetched = useRef(false);
-
     // Helper function to fetch data and update the cache
-    const fetchData = async () => {
+    const fetchData = async (isBackgroundFetch = false) => {
+      log('info', `[FETCH DATA] Start fetching data for key: ${hashedKey}`);
+
+      if (isBackgroundFetch) {
+        setIsFetching(true);
+      } else {
+        setIsLoading(true);
+      }
+
+      setError(null);
+
       try {
         const data = await queryFn();
+
+        log(
+          'info',
+          `[FETCH DATA] Successfully fetched data for key: ${hashedKey}`,
+          data,
+        );
+
         setState((state) => ({
           ...state,
           [hashedKey]: { data, timestamp: Date.now() },
         }));
+
         if (onSuccess) onSuccess(data);
       } catch (error) {
+        log(
+          'error',
+          `[FETCH DATA] Error fetching data for key: ${hashedKey}`,
+          error,
+        );
+        setError(error);
         if (onError) onError(error);
+      } finally {
+        if (isBackgroundFetch) {
+          setIsFetching(false);
+        } else {
+          setIsLoading(false);
+        }
       }
     };
 
@@ -38,33 +77,53 @@ export function createQueryHook(
       const cached = state[hashedKey];
       const now = Date.now();
       if (cached && now - cached.timestamp < cacheTime) {
+        log('info', `[CACHE] Data for key: ${hashedKey} is valid`);
         return cached.data;
-      } 
-      hasFetched.current = false;
+      }
+      log('info', `[CACHE] Data for key: ${hashedKey} is expired or missing`);
+      setHasInitialized(false);
       return null;
     };
 
     // Fetch data if needed and revalidate the cache
     const revalidateCache = async () => {
+      log('info', `[REVALIDATE] Revalidating cache for key: ${hashedKey}`);
+
       const data = getCachedData();
       if (!data) {
-        await fetchData();
         // Mark as fetched
-        hasFetched.current = true;
-      } else if (!hasFetched.current) {
+        log(
+          'info',
+          `[REVALIDATE] Data not in cache or expired, fetching new data for key: ${hashedKey}`,
+        );
+         // Initial fetch
+        await fetchData(false);
+        setHasInitialized(true);
+      } else if (!hasInitialized) {
         // Fetch new data in the background if needed
-        fetchData();
+        log(
+          'info',
+          `[REVALIDATE] Data in cache is valid, fetching new data in the background for key: ${hashedKey}`,
+        );
+        fetchData(true); // Background fetch
       }
     };
 
     // Initial data fetch or revalidation
-    useEffect(() => {
+    useOnMountUnsafe(() => {
+      log(
+        'info',
+        `[MOUNT] Initial data fetch or revalidation for key: ${hashedKey}`,
+      );
       revalidateCache();
     }, [key]);
 
     return {
       data: getCachedData(),
-      refetch: fetchData,
+      isLoading,
+      isFetching,
+      error,
+      refetch: () => fetchData(true),
     };
   };
 }
