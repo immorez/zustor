@@ -13,24 +13,23 @@ export function createQueryHook(
   const { setState, getState } = store;
 
   return function useQuery() {
-    // State to track initialization (for the initial render)
-    const [hasInitialized, setHasInitialized] = useState(false);
-
     // State to track loading (for the initial load)
     const [isLoading, setIsLoading] = useState(false);
     // State to track background fetching (subsequent refetches)
     const [isFetching, setIsFetching] = useState(false);
-
     // State to track if an error occurred
     const [error, setError] = useState<Error | null>(null);
 
     // Default cache time is 1 minute
     const { onSuccess, onError, cacheTime = 60000 } = config;
 
+    // Track if data has been fetched
+    let hasFetched = false;
+
     // Helper function to fetch data and update the cache
     const fetchData = async (isBackgroundFetch = false) => {
       log('info', `[FETCH DATA] Start fetching data for key: ${hashedKey}`);
-
+      
       if (isBackgroundFetch) {
         setIsFetching(true);
       } else {
@@ -81,7 +80,7 @@ export function createQueryHook(
         return cached.data;
       }
       log('info', `[CACHE] Data for key: ${hashedKey} is expired or missing`);
-      setHasInitialized(false);
+      hasFetched = false;
       return null;
     };
 
@@ -96,10 +95,9 @@ export function createQueryHook(
           'info',
           `[REVALIDATE] Data not in cache or expired, fetching new data for key: ${hashedKey}`,
         );
-        // Initial fetch
-        await fetchData(false);
-        setHasInitialized(true);
-      } else if (!hasInitialized) {
+        await fetchData(false); // Initial fetch
+        hasFetched = true;
+      } else if (!hasFetched) {
         // Fetch new data in the background if needed
         log(
           'info',
