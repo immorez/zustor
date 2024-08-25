@@ -15,6 +15,11 @@ export interface QueryConfig<QueryResult> {
   onError?: (error: unknown) => void;
 }
 
+export interface MutationConfig<MutationResult> {
+  onSuccess?: (data: MutationResult) => void;
+  onError?: (error: unknown) => void;
+}
+
 export interface EndpointConfig<QueryResult> {
   queryFn: () => Promise<QueryResult>;
   config?: Partial<QueryConfig<QueryResult>>;

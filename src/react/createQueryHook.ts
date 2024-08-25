@@ -96,7 +96,7 @@ export function createQueryHook(
           'info',
           `[REVALIDATE] Data not in cache or expired, fetching new data for key: ${hashedKey}`,
         );
-         // Initial fetch
+        // Initial fetch
         await fetchData(false);
         setHasInitialized(true);
       } else if (!hasInitialized) {
