@@ -173,6 +173,15 @@ We welcome contributions to `zustor`! If you would like to contribute, please fo
 
 8.  **Review and Feedback:** Your pull request will be reviewed by the maintainers. Be open to feedback and ready to make any necessary revisions.
 
+## TODO
+
+[] - 🛠️ Add support for SSR (Server-Side Rendering)
+[] - 🚀 Implement caching strategies and optimizations
+[] - ⏲️ Improve query and mutation polling mechanisms
+[] - 📄 Enhance documentation and examples
+[] - 🔧 Add more robust error handling
+[] - 🧪 Write comprehensive test coverage
+
 ## License
 
 This project is licensed under the MIT License.
