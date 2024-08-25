@@ -182,6 +182,7 @@ We welcome contributions to `zustor`! If you would like to contribute, please fo
 [] - 🔧 Add more robust error handling
 [] - 🧪 Write comprehensive test coverage
 [] - 🔌 Implement WebSocket (Real-time) updates
+[] - Documentation web page
 
 ## License
 
