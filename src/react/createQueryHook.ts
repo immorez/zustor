@@ -13,10 +13,10 @@ export function createQueryHook(
     const { setState, getState } = store;
 
     // Default cache time is 1 minute
-    const { onSuccess, onError, cacheTime = 60000 } = config; 
-    
+    const { onSuccess, onError, cacheTime = 60000 } = config;
+
     // Track if data has been fetched
-    const hasFetched = useRef(false); 
+    const hasFetched = useRef(false);
 
     // Helper function to fetch data and update the cache
     const fetchData = async () => {
@@ -49,7 +49,7 @@ export function createQueryHook(
       if (!data) {
         await fetchData();
         // Mark as fetched
-        hasFetched.current = true; 
+        hasFetched.current = true;
       } else if (!hasFetched.current) {
         // Fetch new data in the background if needed
         fetchData();

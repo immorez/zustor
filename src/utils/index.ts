@@ -1,4 +1,4 @@
-import { MutationKey, QueryKey } from "../types";
+import { MutationKey, QueryKey } from '../types';
 
 export function hashKey(queryKey: QueryKey | MutationKey): string {
   return JSON.stringify(queryKey, (_, val) =>
