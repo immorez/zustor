@@ -1,6 +1,7 @@
 import { createQueryHook } from './createQueryHook';
 import { createMutationHook } from './createMutationHook';
 import { ZustorStore, ZustorConfig, GenerateHookTypes } from '../types';
+import { hashKey } from '../utils';
 
 const zustorClient = () => {
   let internalStore: ZustorStore | null = null;
@@ -84,11 +85,10 @@ const zustorClient = () => {
       );
     }
 
- 
-    const hashedKey = key.join(':');
+    const hashedKey = hashKey(key);
+
     manualInvalidatedQueries.push(hashedKey);
 
-    console.log(manualInvalidatedQueries)
     internalStore.setState((state) => {
       const newState = { ...state };
       delete newState[hashedKey];

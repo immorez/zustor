@@ -123,13 +123,10 @@ export function createQueryHook(
 
     // Subscribe to state changes for invalidation
     useEffect(() => {
-      const unsubscribe = subscribe((state) => {
-        console.log(hashedKey)
+      const unsubscribe = subscribe(() => {
         if (manualInvalidatedQueries.includes(hashedKey)) {
-          manualInvalidatedQueries = manualInvalidatedQueries.filter(
-            (key) => key !== hashedKey,
-          );
-          console.log(manualInvalidatedQueries)
+          fetchData(true);
+          manualInvalidatedQueries.pop();
           log('info', `[SUBSCRIBE] Cache invalidated for key: ${hashedKey}`);
         }
       });
