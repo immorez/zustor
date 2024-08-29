@@ -5,11 +5,11 @@ import { ZustorStore } from '../types';
 export function createMutationHook(
   key: ReadonlyArray<unknown>,
   mutationFn: (data: any) => Promise<any>,
-  store: ZustorStore,
   config: {
     onError?: (error: Error) => void;
     onSuccess?: (result: any) => void;
   } = {},
+  store: ZustorStore,
 ) {
   const hashedKey = hashKey(key);
   return function useMutation() {

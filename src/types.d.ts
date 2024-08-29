@@ -1,12 +1,21 @@
 import { create } from 'zustand';
 
-type QueryHook<T> = () => {
+export type QueryKey = ReadonlyArray<unknown>;
+
+export type MutationKey = ReadonlyArray<unknown>;
+
+ type QueryHook<T> = () => {
   data: T;
+  isLoading: boolean;
+  isFetching: boolean;
+  error: Error | null;
   refetch: () => Promise<void>;
 };
 
 type MutationHook<T> = () => {
   mutate: (input: any) => Promise<T>;
+  isLoading: boolean;
+  error: Error | null;
 };
 
 export interface QueryConfig<QueryResult> {
@@ -25,28 +34,28 @@ export interface EndpointConfig<QueryResult> {
   config?: Partial<QueryConfig<QueryResult>>;
 }
 
-export interface MutationConfig<MutationInput, MutationResult> {
+export interface MutationEndpointConfig<MutationInput, MutationResult> {
   mutationFn: (data: MutationInput) => Promise<MutationResult>;
+  config?: Partial<MutationConfig<MutationResult>>;
 }
 
 export interface ZustorConfig {
-  queries?: Record<string, EndpointConfig<unknown>>;
-  mutations?: Record<string, MutationConfig<unknown, unknown>>;
+  queries?: Record<string, EndpointConfig<any>>;
+  mutations?: Record<string, MutationEndpointConfig<any, any>>;
 }
 
-export type QueryKey = ReadonlyArray<unknown>;
-export type MutationKey = ReadonlyArray<unknown>;
+// If queryFn return type is a promise, return what's inside promise.
+// Otherwise, return the actual returned value's type.
+export type AwaitedResult<T> = T extends PromiseLike<infer U> ? U : T;
 
 export type ZustorStore = ReturnType<typeof create>;
 
 export type GenerateHookTypes<Config extends ZustorConfig> = {
-  // Map over query endpoints to create `useXQuery` hooks
   [K in keyof Config['queries'] as `use${Capitalize<string & K>}Query`]: QueryHook<
-    ReturnType<Config['queries'][K]['queryFn']>
+    AwaitedResult<ReturnType<Config['queries'][K]['queryFn']>>
   >;
 } & {
-  // Map over mutation endpoints to create `useXMutation` hooks
   [K in keyof Config['mutations'] as `use${Capitalize<string & K>}Mutation`]: MutationHook<
-    ReturnType<Config['mutations'][K]['mutationFn']>
+    AwaitedResult<ReturnType<Config['mutations'][K]['mutationFn']>>
   >;
 };
