@@ -1,8 +1,7 @@
 import { createQueryHook } from './createQueryHook';
 import { createMutationHook } from './createMutationHook';
 import { ZustorStore, ZustorConfig, GenerateHookTypes } from '../types';
-   
- 
+
 const zustorClient = () => {
   let internalStore: ZustorStore | null = null;
 
@@ -13,10 +12,12 @@ const zustorClient = () => {
   const useQuery = (
     key: ReadonlyArray<unknown>,
     queryFn: () => Promise<unknown>,
-    config: any = {}
+    config: any = {},
   ) => {
     if (!internalStore) {
-      throw new Error('Zustor store is not initialized. Please initialize the client first.');
+      throw new Error(
+        'Zustor store is not initialized. Please initialize the client first.',
+      );
     }
     return createQueryHook(key, queryFn, config, internalStore);
   };
@@ -24,19 +25,23 @@ const zustorClient = () => {
   const useMutation = (
     key: ReadonlyArray<unknown>,
     mutationFn: (data: any) => Promise<unknown>,
-    config: any = {}
+    config: any = {},
   ) => {
     if (!internalStore) {
-      throw new Error('Zustor store is not initialized. Please initialize the client first.');
+      throw new Error(
+        'Zustor store is not initialized. Please initialize the client first.',
+      );
     }
     return createMutationHook(key, mutationFn, config, internalStore);
   };
 
   const createApi = <Config extends ZustorConfig>(
-    hookConfig: Config
+    hookConfig: Config,
   ): GenerateHookTypes<Config> => {
     if (!internalStore) {
-      throw new Error('Zustor store is not initialized. Please initialize the client first.');
+      throw new Error(
+        'Zustor store is not initialized. Please initialize the client first.',
+      );
     }
 
     const hooks: Record<string, any> = {};
@@ -44,9 +49,10 @@ const zustorClient = () => {
     // Generate Query Hooks
     if (hookConfig.queries) {
       for (const [endpoint, { queryFn, config }] of Object.entries(
-        hookConfig.queries
+        hookConfig.queries,
       )) {
-        const hookName = `use${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)}Query` as const;
+        const hookName =
+          `use${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)}Query` as const;
         hooks[hookName] = useQuery([endpoint], queryFn, config);
       }
     }
@@ -54,9 +60,10 @@ const zustorClient = () => {
     // Generate Mutation Hooks
     if (hookConfig.mutations) {
       for (const [endpoint, { mutationFn }] of Object.entries(
-        hookConfig.mutations
+        hookConfig.mutations,
       )) {
-        const hookName = `use${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)}Mutation` as const;
+        const hookName =
+          `use${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)}Mutation` as const;
         hooks[hookName] = useMutation([endpoint], mutationFn);
       }
     }

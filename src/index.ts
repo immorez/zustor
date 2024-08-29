@@ -1,5 +1,5 @@
-import zustorClient  from './react';
+import zustorClient from './react';
 
 export { ZustorConfig } from './types.d';
 
-export {zustorClient, }
+export { zustorClient };

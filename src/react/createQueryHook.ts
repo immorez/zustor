@@ -29,7 +29,7 @@ export function createQueryHook(
     // Helper function to fetch data and update the cache
     const fetchData = async (isBackgroundFetch = false) => {
       log('info', `[FETCH DATA] Start fetching data for key: ${hashedKey}`);
-      
+
       if (isBackgroundFetch) {
         setIsFetching(true);
       } else {

@@ -4,7 +4,7 @@ export type QueryKey = ReadonlyArray<unknown>;
 
 export type MutationKey = ReadonlyArray<unknown>;
 
- type QueryHook<T> = () => {
+type QueryHook<T> = () => {
   data: T;
   isLoading: boolean;
   isFetching: boolean;
