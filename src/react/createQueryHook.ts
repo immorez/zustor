@@ -12,7 +12,7 @@ export function createQueryHook(
   const hashedKey = hashKey(key);
   const { setState, getState } = store;
 
-  return function useQuery() {
+  return function useQuery(hookConfig?: Partial<QueryConfig<any>>) {
     // State to track loading (for the initial load)
     const [isLoading, setIsLoading] = useState(false);
     // State to track background fetching (subsequent refetches)
@@ -21,7 +21,7 @@ export function createQueryHook(
     const [error, setError] = useState<Error | null>(null);
 
     // Default cache time is 1 minute
-    const { onSuccess, onError, cacheTime = 60000 } = config;
+    const { onSuccess, onError, cacheTime = 60000 } ={ ...config, ...hookConfig};
 
     // Track if data has been fetched
     let hasFetched = false;
