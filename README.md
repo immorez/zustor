@@ -28,13 +28,28 @@ or
 
 ## Basic Usage
 
-### 1\. Setting Up Queries and Mutations
+### 1\. Initialize Zustor client
 
-First, define your queries and mutations in a configuration object:
+First, create a new Zustor instance and provide it with Zustand store:
+
+```typescript
+import { zustorClient } from 'zustor';
+import { create } from 'zustand';
+
+// Create a Zustand store instance
+const useStore = create(() => ({}));
+
+// Initialize zustor client
+export const zustor = zustorClient().initialize(store);
+```
+
+### 2\. Setting Up Queries and Mutations
+
+Then, define your queries and mutations in a configuration object:
 
 ```typescript
 import create from 'zustand';
-import { createApi } from 'zustor';
+import { zustor } from './path-to-store-file';
 
 const apiConfig = {
   queries: {
@@ -56,17 +71,12 @@ const apiConfig = {
   },
 };
 
-// Create a Zustand store instance
-const useStore = create(() => ({}));
-
 // Generate hooks based on your API configuration
-const { useGetUserQuery, useGetPostsQuery, useUpdateUserMutation } = createApi(
-  apiConfig,
-  useStore,
-);
+const { useGetUserQuery, useGetPostsQuery, useUpdateUserMutation } =
+  zustor.createApi(apiConfig);
 ```
 
-### 2\. Using Generated Hooks in Components
+### 3\. Using Generated Hooks in Components
 
 Now, use the generated hooks in your React components:
 
@@ -88,7 +98,7 @@ function UserProfile() {
 export default UserProfile;
 ```
 
-### 3\. Performing Mutations
+### 4\. Performing Mutations
 
 Use the mutation hooks to update data:
 
