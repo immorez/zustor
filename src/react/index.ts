@@ -4,7 +4,7 @@ import { ZustorStore, ZustorConfig, GenerateHookTypes } from '../types';
 
 const zustorClient = () => {
   let internalStore: ZustorStore | null = null;
-
+  let manualInvalidatedQueries: string[] = [];
   const initialize = (store: ZustorStore) => {
     internalStore = store;
   };
@@ -19,7 +19,13 @@ const zustorClient = () => {
         'Zustor store is not initialized. Please initialize the client first.',
       );
     }
-    return createQueryHook(key, queryFn, config, internalStore);
+    return createQueryHook(
+      key,
+      queryFn,
+      config,
+      internalStore,
+      manualInvalidatedQueries,
+    );
   };
 
   const useMutation = (
@@ -71,9 +77,29 @@ const zustorClient = () => {
     return hooks as GenerateHookTypes<Config>;
   };
 
+  const invalidate = (key: ReadonlyArray<unknown>) => {
+    if (!internalStore) {
+      throw new Error(
+        'Zustor store is not initialized. Please initialize the client first.',
+      );
+    }
+
+ 
+    const hashedKey = key.join(':');
+    manualInvalidatedQueries.push(hashedKey);
+
+    console.log(manualInvalidatedQueries)
+    internalStore.setState((state) => {
+      const newState = { ...state };
+      delete newState[hashedKey];
+      return newState;
+    });
+  };
+
   return {
     initialize,
     createApi,
+    invalidate,
   };
 };
 

@@ -1,27 +1,32 @@
 import { hashKey, log } from '../utils';
 import { QueryConfig, ZustorStore } from '../types';
 import { useOnMountUnsafe } from './hooks/useOnMountUnsafe';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function createQueryHook(
   key: ReadonlyArray<unknown>,
   queryFn: () => Promise<any>,
   config: Partial<QueryConfig<any>> = {},
   store: ZustorStore,
+  manualInvalidatedQueries: string[],
 ) {
   const hashedKey = hashKey(key);
-  const { setState, getState } = store;
+  const { setState, getState, subscribe } = store;
 
   return function useQuery(hookConfig?: Partial<QueryConfig<any>>) {
     // State to track loading (for the initial load)
     const [isLoading, setIsLoading] = useState(false);
-    // State to track background fetching (subsequent refetches)
+    // State to track background fetching (subsequent refetch)
     const [isFetching, setIsFetching] = useState(false);
     // State to track if an error occurred
     const [error, setError] = useState<Error | null>(null);
 
     // Default cache time is 1 minute
-    const { onSuccess, onError, cacheTime = 60000 } ={ ...config, ...hookConfig};
+    const {
+      onSuccess,
+      onError,
+      cacheTime = 60000,
+    } = { ...config, ...hookConfig };
 
     // Track if data has been fetched
     let hasFetched = false;
@@ -114,7 +119,23 @@ export function createQueryHook(
         `[MOUNT] Initial data fetch or revalidation for key: ${hashedKey}`,
       );
       revalidateCache();
-    }, [key]);
+    }, []);
+
+    // Subscribe to state changes for invalidation
+    useEffect(() => {
+      const unsubscribe = subscribe((state) => {
+        console.log(hashedKey)
+        if (manualInvalidatedQueries.includes(hashedKey)) {
+          manualInvalidatedQueries = manualInvalidatedQueries.filter(
+            (key) => key !== hashedKey,
+          );
+          console.log(manualInvalidatedQueries)
+          log('info', `[SUBSCRIBE] Cache invalidated for key: ${hashedKey}`);
+        }
+      });
+
+      return () => unsubscribe();
+    }, []);
 
     return {
       data: getCachedData(),
