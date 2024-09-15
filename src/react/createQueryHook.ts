@@ -5,14 +5,14 @@ import { useState } from 'react';
 
 export function createQueryHook(
   key: ReadonlyArray<unknown>,
-  queryFn: () => Promise<any>,
-  config: Partial<QueryConfig<any>> = {},
+  queryFn: (params?: Record<string, unknown>) => Promise<unknown>,
+  config: Partial<QueryConfig<unknown>> = {},
   store: ZustorStore,
 ) {
   const hashedKey = hashKey(key);
   const { setState, getState } = store;
 
-  return function useQuery() {
+  return function useQuery(params?: Record<string, unknown>) {
     // State to track initialization (for the initial render)
     const [hasInitialized, setHasInitialized] = useState(false);
 
@@ -28,8 +28,15 @@ export function createQueryHook(
     const { onSuccess, onError, cacheTime = 60000 } = config;
 
     // Helper function to fetch data and update the cache
-    const fetchData = async (isBackgroundFetch = false) => {
-      log('info', `[FETCH DATA] Start fetching data for key: ${hashedKey}`);
+    const fetchData = async (
+      isBackgroundFetch = false,
+      fetchParams?: Record<string, unknown>,
+    ) => {
+      log(
+        'info',
+        `[FETCH DATA] Start fetching data for key: ${hashedKey} with params:`,
+        fetchParams || params,
+      );
 
       if (isBackgroundFetch) {
         setIsFetching(true);
@@ -40,7 +47,7 @@ export function createQueryHook(
       setError(null);
 
       try {
-        const data = await queryFn();
+        const data = await queryFn(fetchParams || params);
 
         log(
           'info',
@@ -48,7 +55,7 @@ export function createQueryHook(
           data,
         );
 
-        setState((state) => ({
+        setState((state: object) => ({
           ...state,
           [hashedKey]: { data, timestamp: Date.now() },
         }));
@@ -105,7 +112,7 @@ export function createQueryHook(
           'info',
           `[REVALIDATE] Data in cache is valid, fetching new data in the background for key: ${hashedKey}`,
         );
-        fetchData(true); // Background fetch
+        fetchData(true);
       }
     };
 
@@ -113,17 +120,19 @@ export function createQueryHook(
     useOnMountUnsafe(() => {
       log(
         'info',
-        `[MOUNT] Initial data fetch or revalidation for key: ${hashedKey}`,
+        `[MOUNT] Initial data fetch or revalidation for key: ${hashedKey} with params:`,
+        params,
       );
       revalidateCache();
-    }, [key]);
+    }, [key, params]);
 
     return {
       data: getCachedData(),
       isLoading,
       isFetching,
       error,
-      refetch: () => fetchData(true),
+      refetch: (newParams?: Record<string, unknown>) =>
+        fetchData(true, newParams),
     };
   };
 }

@@ -21,12 +21,17 @@ export function createApi<Config extends ZustorConfig>(
 
   // Generate Mutation Hooks
   if (hookConfig.mutations) {
-    for (const [endpoint, { mutationFn }] of Object.entries(
+    for (const [endpoint, { mutationFn, config }] of Object.entries(
       hookConfig.mutations,
     )) {
       const hookName =
         `use${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)}Mutation` as const;
-      hooks[hookName] = createMutationHook([endpoint], mutationFn, store);
+      hooks[hookName] = createMutationHook(
+        [endpoint],
+        mutationFn,
+        config,
+        store,
+      );
     }
   }
 
