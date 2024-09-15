@@ -126,33 +126,77 @@ export default UpdateUserForm;
 
 ```
 
-## Advanced Features
+### Query Parameters Support
 
-### Cache Invalidation & Polling
+**Zustor** now supports query parameters in its query hooks, enabling more dynamic and flexible data fetching. This feature allows you to pass parameters to your query functions, which can be used to build URLs or modify the request based on the provided parameters.
 
-zustor provides built-in support for cache invalidation and polling intervals, allowing you to keep your data fresh.
+#### How It Works
 
-### Customizing the Cache Key
+1.  **Define Query Function with Parameters**: Update your query function to accept parameters and use them to customize the request.
 
-zustor allows you to customize the cache key by passing an array as the key and serializing it. Strings are placed first and sorted, followed by objects with structural sharing, similar to React Query.
+    ```typescript
+    const getComments = async (params: { postId: number }) => {
+      const response = await fetch(`/api/comments?postId=${params.postId}`);
+      return response.json();
+    };
+    ```
+
+2.  **Update Query Configuration**: Ensure your query configuration includes parameter support.
+
+    ```typescript
+    const apiConfig = {
+      queries: {
+        getComments: {
+          queryFn: getComments,
+        },
+      },
+    };
+    ```
+
+3.  **Use the Hook with Parameters**: When using the generated hook, pass the necessary parameters.
+
+    ```typescript
+    import { useGetCommentsQuery } from './store/api'; // Adjust import path as needed
+
+    function CommentsList({ postId }: { postId: number }) {
+      const { data: comments, refetch } = useGetCommentsQuery({ postId });
+
+      return (
+        <div>
+          <button onClick={refetch}>Refresh Comments</button>
+          <ul>
+            {comments?.map(comment => (
+              <li key={comment.id}>{comment.text}</li>
+            ))}
+          </ul>
+        </div>
+        );
+      }
+    ```
 
 ## API
 
-### `createApi(hookConfig: ZustorConfig, store: ZustorStore)`
+### `createApi(hookConfig: ZustorConfig)`
 
 - **`hookConfig`**: Configuration object containing queries and mutations.
-- **`store`**: Zustand store instance to manage the state.
 
 This function returns an object containing the dynamically generated hooks based on the provided configuration.
 
 ### `Query Hook`
 
 - **`data`**: The fetched data.
+- **`isLoading`**: Indicates if the data is currently being loaded.
+- **`isFetching`**: Indicates if the data is being fetched in the background.
+- **`error`**: Error, if any occurred during data fetching.
 - **`refetch`**: Function to refetch the data.
+- **`config`**: Optional configuration to customize the query behavior, such as parameters, cache time, and success/error callbacks.
 
 ### `Mutation Hook`
 
 - **`mutate`**: Function to trigger the mutation.
+- **`isLoading`**: Indicates if the mutation is currently in progress.
+- **`error`**: Error, if any occurred during the mutation.
+- **`config`**: Optional configuration to customize the mutation behavior, such as success/error callbacks.
 
 ## Contributing
 
