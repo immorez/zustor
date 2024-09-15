@@ -29,8 +29,8 @@ export interface MutationConfig<MutationResult> {
   onError?: (error: unknown) => void;
 }
 
-export interface QueryObjectConfig<QueryResult> {
-  queryFn: () => Promise<QueryResult>;
+export interface QueryObjectConfig<QueryParams, QueryResult> {
+  queryFn: (params?: QueryParams) => Promise<QueryResult>;
   config?: Partial<QueryConfig<QueryResult>>;
 }
 
@@ -40,7 +40,7 @@ export interface MutationObjectConfig<MutationInput, MutationResult> {
 }
 
 export interface ZustorConfig {
-  queries?: Record<string, QueryObjectConfig<unknown>>;
+  queries?: Record<string, QueryObjectConfig<unknown, unknown>>;
   mutations?: Record<string, MutationObjectConfig<unknown, unknown>>;
 }
 

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 export function createQueryHook(
   key: ReadonlyArray<unknown>,
-  queryFn: (params?: Record<string, unknown>) => Promise<unknown>,
+  queryFn: (queryParams?: Record<string, unknown>) => Promise<unknown>,
   config: Partial<QueryConfig<unknown>> = {},
   store: ZustorStore,
   manualInvalidatedQueries: string[],
@@ -14,7 +14,7 @@ export function createQueryHook(
   const { setState, getState, subscribe } = store;
 
   return function useQuery(
-    params?: Record<string, unknown>,
+    queryParams?: Record<string, unknown>,
     hookConfig?: Partial<QueryConfig<any>>,
   ) {
     // State to track loading (for the initial load)
@@ -41,8 +41,8 @@ export function createQueryHook(
     ) => {
       log(
         'info',
-        `[FETCH DATA] Start fetching data for key: ${hashedKey} with params:`,
-        fetchParams || params,
+        `[FETCH DATA] Start fetching data for key: ${hashedKey} with queryParams:`,
+        fetchParams || queryParams,
       );
 
       if (isBackgroundFetch) {
@@ -54,7 +54,7 @@ export function createQueryHook(
       setError(null);
 
       try {
-        const data = await queryFn(fetchParams || params);
+        const data = await queryFn(fetchParams || queryParams);
 
         log(
           'info',
@@ -126,11 +126,11 @@ export function createQueryHook(
     useOnMountUnsafe(() => {
       log(
         'info',
-        `[MOUNT] Initial data fetch or revalidation for key: ${hashedKey} with params:`,
-        params,
+        `[MOUNT] Initial data fetch or revalidation for key: ${hashedKey} with queryParams:`,
+        queryParams,
       );
       revalidateCache();
-    }, [params]);
+    }, [queryParams]);
 
     // Subscribe to state changes for invalidation
     useEffect(() => {
