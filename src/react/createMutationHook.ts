@@ -4,10 +4,10 @@ import { ZustorStore } from '../types';
 
 export function createMutationHook(
   key: ReadonlyArray<unknown>,
-  mutationFn: (data: any) => Promise<any>,
+  mutationFn: (data: unknown) => Promise<unknown>,
   config: {
     onError?: (error: Error) => void;
-    onSuccess?: (result: any) => void;
+    onSuccess?: (result: unknown) => void;
   } = {},
   store: ZustorStore,
 ) {
@@ -20,7 +20,7 @@ export function createMutationHook(
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState<Error | null>(null);
 
-    const mutate = async (data: any) => {
+    const mutate = async (data: unknown) => {
       setIsLoading(true);
       setIsError(false);
       setIsSuccess(false);
@@ -34,7 +34,7 @@ export function createMutationHook(
 
       try {
         const result = await mutationFn(data);
-        setState((state) => ({ ...state, [hashedKey]: result }));
+        setState((state: object) => ({ ...state, [hashedKey]: result }));
 
         log(
           'info',

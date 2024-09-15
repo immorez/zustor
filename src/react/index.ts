@@ -1,6 +1,12 @@
 import { createQueryHook } from './createQueryHook';
 import { createMutationHook } from './createMutationHook';
-import { ZustorStore, ZustorConfig, GenerateHookTypes } from '../types';
+import {
+  ZustorStore,
+  ZustorConfig,
+  GenerateHookTypes,
+  QueryConfig,
+  MutationConfig,
+} from '../types';
 import { hashKey } from '../utils';
 
 const zustorClient = () => {
@@ -13,7 +19,7 @@ const zustorClient = () => {
   const useQuery = (
     key: ReadonlyArray<unknown>,
     queryFn: () => Promise<unknown>,
-    config: any = {},
+    config: Partial<QueryConfig<unknown>>,
   ) => {
     if (!internalStore) {
       throw new Error(
@@ -31,8 +37,8 @@ const zustorClient = () => {
 
   const useMutation = (
     key: ReadonlyArray<unknown>,
-    mutationFn: (data: any) => Promise<unknown>,
-    config: any = {},
+    mutationFn: (data: unknown) => Promise<unknown>,
+    config: Partial<MutationConfig<unknown>>,
   ) => {
     if (!internalStore) {
       throw new Error(
@@ -51,7 +57,7 @@ const zustorClient = () => {
       );
     }
 
-    const hooks: Record<string, any> = {};
+    const hooks: Record<string, unknown> = {};
 
     // Generate Query Hooks
     if (hookConfig.queries) {
@@ -66,12 +72,12 @@ const zustorClient = () => {
 
     // Generate Mutation Hooks
     if (hookConfig.mutations) {
-      for (const [endpoint, { mutationFn }] of Object.entries(
+      for (const [endpoint, { mutationFn, config }] of Object.entries(
         hookConfig.mutations,
       )) {
         const hookName =
           `use${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)}Mutation` as const;
-        hooks[hookName] = useMutation([endpoint], mutationFn);
+        hooks[hookName] = useMutation([endpoint], mutationFn, config);
       }
     }
 
@@ -87,9 +93,10 @@ const zustorClient = () => {
 
     const hashedKey = hashKey(key);
 
-    manualInvalidatedQueries.push(hashedKey);
+    if (!manualInvalidatedQueries.includes(hashedKey))
+      manualInvalidatedQueries.push(hashedKey);
 
-    internalStore.setState((state) => {
+    internalStore.setState((state: object) => {
       const newState = { ...state };
       delete newState[hashedKey];
       return newState;
