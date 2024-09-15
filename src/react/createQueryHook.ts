@@ -1,6 +1,5 @@
 import { hashKey, log } from '../utils';
 import { QueryConfig, ZustorStore } from '../types';
-import { useOnMountUnsafe } from './hooks/useOnMountUnsafe';
 import { useEffect, useMemo, useState } from 'react';
 
 export function createQueryHook(
