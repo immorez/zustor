@@ -29,19 +29,19 @@ export interface MutationConfig<MutationResult> {
   onError?: (error: unknown) => void;
 }
 
-export interface EndpointConfig<QueryResult> {
+export interface QueryObjectConfig<QueryResult> {
   queryFn: () => Promise<QueryResult>;
   config?: Partial<QueryConfig<QueryResult>>;
 }
 
-export interface MutationEndpointConfig<MutationInput, MutationResult> {
+export interface MutationObjectConfig<MutationInput, MutationResult> {
   mutationFn: (data: MutationInput) => Promise<MutationResult>;
   config?: Partial<MutationConfig<MutationResult>>;
 }
 
 export interface ZustorConfig {
-  queries?: Record<string, EndpointConfig<any>>;
-  mutations?: Record<string, MutationEndpointConfig<any, any>>;
+  queries?: Record<string, QueryObjectConfig<unknown>>;
+  mutations?: Record<string, MutationObjectConfig<unknown, unknown>>;
 }
 
 // If queryFn return type is a promise, return what's inside promise.
