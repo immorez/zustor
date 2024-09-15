@@ -31,11 +31,7 @@ export interface MutationConfig<MutationResult> {
 }
 
 export interface QueryObjectConfig<QueryResult> {
-<<<<<<< HEAD
   queryFn: (params?: Record<string, unknown>) => Promise<QueryResult>;
-=======
-  queryFn: () => Promise<QueryResult>;
->>>>>>> d4736af11f526edaf704b412e182750bd3cc3bcc
   config?: Partial<QueryConfig<QueryResult>>;
 }
 
