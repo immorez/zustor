@@ -34,7 +34,7 @@ export function createMutationHook(
 
       try {
         const result = await mutationFn(data);
-        setState((state) => ({ ...state, [hashedKey]: result }));
+        setState((state: object) => ({ ...state, [hashedKey]: result }));
 
         log(
           'info',

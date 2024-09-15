@@ -4,7 +4,7 @@ export type QueryKey = ReadonlyArray<unknown>;
 
 export type MutationKey = ReadonlyArray<unknown>;
 
-type QueryHook<T> = (hookConfig?: Partial<QueryConfig<any>>) => {
+type QueryHook<T> = (hookConfig?: Partial<QueryConfig<unknown>>) => {
   data: T;
   isLoading: boolean;
   isFetching: boolean;
@@ -13,12 +13,13 @@ type QueryHook<T> = (hookConfig?: Partial<QueryConfig<any>>) => {
 };
 
 type MutationHook<T> = () => {
-  mutate: (input: any) => Promise<T>;
+  mutate: (input: unknown) => Promise<T>;
   isLoading: boolean;
   error: Error | null;
 };
 
 export interface QueryConfig<QueryResult> {
+  params?: Record<string, unknown>;
   cacheTime?: number;
   onSuccess?: (data: QueryResult) => void;
   onError?: (error: unknown) => void;
@@ -29,8 +30,8 @@ export interface MutationConfig<MutationResult> {
   onError?: (error: unknown) => void;
 }
 
-export interface QueryObjectConfig<QueryParams, QueryResult> {
-  queryFn: (params?: QueryParams) => Promise<QueryResult>;
+export interface QueryObjectConfig<QueryResult> {
+  queryFn: (params?: Record<string, unknown>) => Promise<QueryResult>;
   config?: Partial<QueryConfig<QueryResult>>;
 }
 
@@ -40,7 +41,7 @@ export interface MutationObjectConfig<MutationInput, MutationResult> {
 }
 
 export interface ZustorConfig {
-  queries?: Record<string, QueryObjectConfig<unknown, unknown>>;
+  queries?: Record<string, QueryObjectConfig<unknown>>;
   mutations?: Record<string, MutationObjectConfig<unknown, unknown>>;
 }
 

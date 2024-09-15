@@ -9,5 +9,5 @@ export function useOnMountUnsafe(effect: EffectCallback, key: unknown[]) {
       initialized.current = true;
       effect();
     }
-  }, key);
+  }, [...key]);
 }

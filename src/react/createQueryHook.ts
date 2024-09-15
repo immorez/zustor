@@ -1,22 +1,18 @@
 import { hashKey, log } from '../utils';
 import { QueryConfig, ZustorStore } from '../types';
 import { useOnMountUnsafe } from './hooks/useOnMountUnsafe';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export function createQueryHook(
   key: ReadonlyArray<unknown>,
-  queryFn: (queryParams?: Record<string, unknown>) => Promise<unknown>,
+  queryFn: (params?: Record<string, unknown>) => Promise<unknown>,
   config: Partial<QueryConfig<unknown>> = {},
   store: ZustorStore,
   manualInvalidatedQueries: string[],
 ) {
-  const hashedKey = hashKey(key);
   const { setState, getState, subscribe } = store;
 
-  return function useQuery(
-    queryParams?: Record<string, unknown>,
-    hookConfig?: Partial<QueryConfig<any>>,
-  ) {
+  return function useQuery(hookConfig?: Partial<QueryConfig<unknown>>) {
     // State to track loading (for the initial load)
     const [isLoading, setIsLoading] = useState(false);
     // State to track background fetching (subsequent refetch)
@@ -29,20 +25,23 @@ export function createQueryHook(
       onSuccess,
       onError,
       cacheTime = 60000,
+      params,
     } = { ...config, ...hookConfig };
+
+    const hashedKey = useMemo(
+      () => (params ? hashKey([...key, params]) : hashKey(key)),
+      [params],
+    );
 
     // Track if data has been fetched
     let hasFetched = false;
 
     // Helper function to fetch data and update the cache
-    const fetchData = async (
-      isBackgroundFetch = false,
-      fetchParams?: Record<string, unknown>,
-    ) => {
+    const fetchData = async (isBackgroundFetch = false) => {
       log(
         'info',
-        `[FETCH DATA] Start fetching data for key: ${hashedKey} with queryParams:`,
-        fetchParams || queryParams,
+        `[FETCH DATA] Start fetching data for key: ${hashedKey} with params:`,
+        params,
       );
 
       if (isBackgroundFetch) {
@@ -54,7 +53,7 @@ export function createQueryHook(
       setError(null);
 
       try {
-        const data = await queryFn(fetchParams || queryParams);
+        const data = await queryFn(params);
 
         log(
           'info',
@@ -95,6 +94,11 @@ export function createQueryHook(
         return cached.data;
       }
       log('info', `[CACHE] Data for key: ${hashedKey} is expired or missing`);
+      store.setState((state: object) => {
+        const newState = { ...state };
+        delete newState[hashedKey];
+        return newState;
+      });
       hasFetched = false;
       return null;
     };
@@ -105,12 +109,12 @@ export function createQueryHook(
 
       const data = getCachedData();
       if (!data) {
-        // Mark as fetched
         log(
           'info',
           `[REVALIDATE] Data not in cache or expired, fetching new data for key: ${hashedKey}`,
         );
-        await fetchData(false); // Initial fetch
+        await fetchData(false);
+        // Mark as fetched
         hasFetched = true;
       } else if (!hasFetched) {
         // Fetch new data in the background if needed
@@ -123,14 +127,14 @@ export function createQueryHook(
     };
 
     // Initial data fetch or revalidation
-    useOnMountUnsafe(() => {
+    useEffect(() => {
       log(
         'info',
-        `[MOUNT] Initial data fetch or revalidation for key: ${hashedKey} with queryParams:`,
-        queryParams,
+        `[MOUNT] Initial data fetch or revalidation for key: ${hashedKey} with params:`,
+        params,
       );
       revalidateCache();
-    }, [queryParams]);
+    }, [hashedKey]);
 
     // Subscribe to state changes for invalidation
     useEffect(() => {
@@ -143,15 +147,14 @@ export function createQueryHook(
       });
 
       return () => unsubscribe();
-    }, []);
+    }, [hashedKey]);
 
     return {
       data: getCachedData(),
       isLoading,
       isFetching,
       error,
-      refetch: (newParams?: Record<string, unknown>) =>
-        fetchData(true, newParams),
+      refetch: () => fetchData(true),
     };
   };
 }
