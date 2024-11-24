@@ -7,7 +7,7 @@ export function createQueryHook(
   queryFn: (params?: Record<string, unknown>) => Promise<unknown>,
   config: Partial<QueryConfig<unknown>> = {},
   store: ZustorStore,
-  manualInvalidatedQueries: string[],
+  manualInvalidatedQueries?: string[],
 ) {
   const { setState, getState, subscribe } = store;
 
